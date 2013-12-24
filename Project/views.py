@@ -61,3 +61,13 @@ def create_new_project(request):
             print e
             returnDict['error'] = e.message
     return HttpResponse(json.dumps(returnDict), content_type="application/json")
+
+
+def project_detail(request, newid="0"):
+    """
+        Get's all of the detail for a specific project
+    """
+    newid = int(newid)
+    project = Project.objects.filter(id=newid).get()
+    c = RequestContext(request, {'project': project})
+    return render_to_response('Project/detail.html', c)

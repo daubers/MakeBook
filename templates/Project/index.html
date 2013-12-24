@@ -14,7 +14,7 @@
                 {% if projects %}
                     <ul>
                         {% for project in projects %}
-                            <li><a href="/Project/{{ project.id }}/">{{ project.title }}</a></li>
+                            <li><a href="/Project/Detail/{{ project.id }}/">{{ project.title }}</a></li>
                         {% endfor %}
                     </ul>
                 {% else %}

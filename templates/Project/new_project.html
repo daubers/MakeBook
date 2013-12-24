@@ -3,9 +3,11 @@
 {% block head %}
     <script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
     <link href="/static/css/datepicker.css" rel="stylesheet">
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('#startDate').datepicker();
+
         });
         function processForm(){
             var formDict = {
@@ -14,8 +16,8 @@
                 category: $('#inputCategory').val()
             }
             $.post('/Projects/New/Create/', {projectdata: JSON.stringify(formDict)},function(data) {
-                //window.location.href = '/Projects/';
-              }
+                        window.location.href = '/Projects/';
+                    }
             );
         }
     </script>

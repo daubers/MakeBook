@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block contents %}
+    <div class="page-header">
+        <h1>Project Detail - {{ project.title }}</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Current Projects</h3>
+                </div>
+                <div class="panel-body">
+                    {% if projects %}
+                        <ul>
+                            {% for project in projects %}
+                                <li><a href="/Project/Detail/{{ project.id }}/">{{ project.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        No projects
+                    {% endif %}
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Recent Orders</h3>
+                </div>
+                <div class="panel-body">
+                    {% if orders %}
+                        <ul>
+                            {% for order in orders %}
+                                <li><a href="/Order/{{ order.id }}">{{ order.part.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        No orders placed
+                    {% endif %}
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Expected Deliveries</h3>
+                </div>
+                <div class="panel-body">
+                    {% if deliveries %}
+                        <ul>
+                            {% for delivery in deliveries %}
+                                <li><a href="/Order/{{ order.id }}">{{ order.part.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        No deliveries expected
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- /.col-sm-4 -->
+        <div class="col-sm-7">
+            <p>MakeBook is your one stop shop for information on your ongoing projects. Select a menu item from the top,
+                or
+                an item from the left to begin </p>
+        </div>
+    </div>
+{% endblock %}
