@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block contents %}
+    <div class="page-header">
+        <h1>Current Projects</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+
+            {% if projects %}
+                <table id="projectTable">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Start Date</th>
+                        <th>Category</th>
+                    </tr>
+                    {% for project in projects %}
+                        <tr>
+                            <td>project.id</td>
+                            <td>project.title</td>
+                            <td>project.startDate</td>
+                            <td>project.category</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>No current Projects</p>
+            {% endif %}
+            <button type="button" class="btn btn-primary"
+                    onclick="window.location.href = '/Projects/new/'; return false;">Create New Project
+            </button>
+        </div>
+    </div>
+{% endblock %}

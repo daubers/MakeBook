@@ -10,6 +10,7 @@ class Project(models.Model):
     title = models.TextField(max_length=255)
     startDate = models.DateTimeField()
     category = models.TextField(max_length=255)
+    complete = models.BooleanField()
 
 
 class BoM(models.Model):
