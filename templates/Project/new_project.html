@@ -7,6 +7,17 @@
         $(document).ready(function () {
             $('#startDate').datepicker();
         });
+        function processForm(){
+            var formDict = {
+                name: $('#inputName').val(),
+                startDate: $('#startDate').val(),
+                category: $('#inputCategory').val()
+            }
+            $.post('/Projects/New/Create/', {projectdata: JSON.stringify(formDict)},function(data) {
+                //window.location.href = '/Projects/';
+              }
+            );
+        }
     </script>
 {% endblock %}
 
@@ -19,14 +30,15 @@
         </div>
         <div class="col-sm-4">
             <form role="form">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="inputName">Project Name</label>
                     <input type="text" class="form-control" id="inputName" placeholder="Enter project name">
                 </div>
                 <div class="form-group">
                     <label for="startDate">Start Date</label>
-                    <div class="input-append date" id="dp3" data-date="12-02-2012" data-date-format="dd-mm-yyyy">
-                      <input class="span2" size="16" type="text" value="12-02-2012" id="startDate">
+                    <div class="input-append date" id="dp3" data-date="12/02/2012" data-date-format="dd-mm-yyyy">
+                      <input class="span2" size="16" type="text" value="12/02/2012" id="startDate">
                       <span class="add-on"><i class="icon-th"></i></span>
                     </div>
                 </div>
@@ -34,7 +46,7 @@
                     <label for="inputCategory">Category</label>
                     <input type="text" class="form-control" id="inputCategory" placeholder="Enter category name">
                 </div>
-                <button type="submit" class="btn btn-default">Create Project</button>
+                <button type="button" class="btn btn-default" onclick="processForm();">Create Project</button>
             </form>
         </div>
     </div>
