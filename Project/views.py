@@ -1,5 +1,6 @@
-from django.shortcuts import render_to_response, HttpResponse, RequestContext
-from models import Project, Part, BoMToParts
+from django.shortcuts import render_to_response, HttpResponse, RequestContext, Http404
+from models import Project, Part, BoMToParts, BoMtoProject
+
 import json
 import datetime
 # Create your views here.
@@ -69,5 +70,22 @@ def project_detail(request, newid="0"):
     """
     newid = int(newid)
     project = Project.objects.filter(id=newid).get()
-    c = RequestContext(request, {'project': project})
+    boms = BoMtoProject.objects.filter(project=project).all()
+    c = RequestContext(request, {'project': project,
+                                 'BoMs': boms
+                                 })
     return render_to_response('Project/detail.html', c)
+
+
+def create_bom(request):
+    """
+        Create a new bill of materials
+    """
+    #We should have been posted a project id to start with.....
+    if request.method == 'POST':
+        project = Project.objects.filter(id=request.POST['projid']).get()
+        c = RequestContext(request, {'projid': project.id
+                                     })
+        return render_to_response('Project/new_bom.html', c)
+    else:
+        raise Http404()

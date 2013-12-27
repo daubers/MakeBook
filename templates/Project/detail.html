@@ -8,6 +8,30 @@
         <div class="col-sm-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
+                    <h3 class="panel-title">Bills of Materials</h3>
+                </div>
+                <div class="panel-body">
+                    {% if boms %}
+                        <ul>
+                            {% for project in projects %}
+                                <li><a href="/BoM/Detail/{{ boms.bom.id }}/">{{ boms.bom.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        No BoMs
+                    {% endif %}
+                    <hr />
+                    <form action="/BoM/New/" method="post" id="BoMForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="projid" value="{{ project.id }}" />
+                    </form>
+                    <button type="button" class="btn btn-default btn-sm" onclick="$('#BoMForm').submit();">
+                      <span class="glyphicon glyphicon-plus-sign"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
                     <h3 class="panel-title">Current Tasks</h3>
                 </div>
                 <div class="panel-body">

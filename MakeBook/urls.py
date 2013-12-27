@@ -13,5 +13,8 @@ urlpatterns = patterns('',
                        url(r'^Projects/Detail/(?P<newid>\d)/$', "Project.views.project_detail"),
                        url(r'^Projects/New/$', "Project.views.new_project"),
                        url(r'^Projects/New/Create/$', "Project.views.create_new_project"),
+
+                       url(r'^BoM/New/$', "Project.views.create_bom"),
+
                        url(r'^admin/', include(admin.site.urls)),
 )
