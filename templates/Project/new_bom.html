@@ -20,6 +20,16 @@
                     }
             );
         }
+
+        function selectChange(){
+            var sel = $("#partselect");
+            if (sel.val() == "new"){
+                $("#newpartform").show();
+            }
+            else {
+                $("#newpartform").hide();
+            }
+        }
     </script>
 {% endblock %}
 
@@ -42,8 +52,57 @@
                     <label for="inputDescription">Description</label>
                     <input type="text" class="form-control" id="inputDescription" placeholder="Enter description">
                 </div>
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#partModal">
+                  Launch demo modal
+                </button>
 
-                <button type="button" class="btn btn-default" onclick="processForm();">Create Project</button>
+                <!-- Modal -->
+                <div class="modal fade" id="partModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Create New Part</h4>
+                      </div>
+                      <div class="modal-body">
+                        <div id="selectPart">
+                            <select id="partselect" class="form-control" onchange="selectChange();">
+                                <option value="new">Create New Part</option>
+                            </select>
+                        </div>
+                        <hr />
+                        <div id="newpartform">
+                            <form role="form" name="part_form">
+                                <div class="form-group">
+                                    <label for="inputPartName">Part Name</label>
+                                    <input type="text" class="form-control" id="inputPartName" placeholder="Enter part name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPartSource">Part Source</label>
+                                    <input type="text" class="form-control" id="inputPartSource" placeholder="Enter part source">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPartDescription">Part Description</label>
+                                    <input type="text" class="form-control" id="inputPartDescription" placeholder="Enter part description">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPartDescription">Part Cost</label>
+                                    <input type="number" step="0.10" class="form-control" id="inputPartCost" placeholder="Enter part cost">
+                                </div>
+                            </form>
+                            <button class="btn btn-primary btn-sm">
+                                Save and Add
+                            </button>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+                <button type="button" class="btn btn-default" onclick="processForm();">Create BoM</button>
             </form>
         </div>
     </div>
