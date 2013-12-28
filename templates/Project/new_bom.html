@@ -52,8 +52,35 @@
                     <label for="inputDescription">Description</label>
                     <input type="text" class="form-control" id="inputDescription" placeholder="Enter description">
                 </div>
+                <hr />
+
+                    <table class="table" id="partstable">
+                        <thead>
+                            <tr>
+                                <th>Part ID</th><th>Part Name</th><th>Quantity</th><th>Ordered</th><th>Arrived</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% if bomtoparts %}
+                            {% for part in bomtoparts %}
+                                <tr>
+                                    <td>{{ part.part.id }}</td>
+                                    <td>{{ part.part.name }}</td>
+                                    <td><input id="quantity" type="number" value="{{ part.quantity }}"></td>
+                                    <td>{{ part.ordered }}</td>
+                                    <td>{{ part.arrived }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+
+                        </tbody>
+                    </table>
+                    {% if not bomtoparts %}
+                        <p>No parts added to BoM</p>
+                    {% endif %}
+                <hr />
                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#partModal">
-                  Launch demo modal
+                  Add/Create new part
                 </button>
 
                 <!-- Modal -->
@@ -102,6 +129,7 @@
                     </div><!-- /.modal-content -->
                   </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
+                <br />
                 <button type="button" class="btn btn-default" onclick="processForm();">Create BoM</button>
             </form>
         </div>

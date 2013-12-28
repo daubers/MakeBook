@@ -89,3 +89,10 @@ def create_bom(request):
         return render_to_response('Project/new_bom.html', c)
     else:
         raise Http404()
+
+
+def new_part(request):
+    """
+        Ajax method to create a new part
+        returns the new parts id on success and false on failure
+    """
