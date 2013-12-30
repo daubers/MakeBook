@@ -38,10 +38,6 @@ class BoMToParts(models.Model):
     part = models.ForeignKey(Part)
     bom = models.ForeignKey(BoM)
     quantity = models.IntegerField()
-    ordered = models.BooleanField()
-    order_date = models.DateTimeField()
-    arrived = models.BooleanField()
-    arrival_date = models.DateTimeField()
 
 
 class BoMtoProject(models.Model):

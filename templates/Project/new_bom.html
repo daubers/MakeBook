@@ -16,12 +16,21 @@
                 description: $('#inputPartDescription').val(),
                 cost: $('#inputPartCost').val()
             }
-            $.post('/Parts/New/Create/', {newpart: JSON.stringify(formDict)},function(data) {
+            $.post('/Parts/New/Create/', {newpart: JSON.stringify(formDict)}, function (data) {
                         returndict = data;
                        $('#partstable tr:last').after('<tr><td>'+returndict.id+'</td><td>'+formDict.name+'</td><td><input type="number" id="quantity-"'+returndict.id+'"></td><td>false</td><td>false</td></tr>');
-                       $("#partModal").modal('toggle');
+                        $('#partselect').append('<option value=' + returndict.id + '>' + formDict.name + '</option>');
+                        $("#partModal").modal('toggle');
                     }
             );
+        }
+
+        function addSelectPartToBom() {
+
+            $("#partModal").modal('toggle');
+            var selectOption = $('#partselect')
+            $('#partstable tr:last').after('<tr><td>' + selectOption.val() + '</td><td>' + $('#partselect option:selected').text() + '</td><td><input type="number" id="quantity-"' + selectOption.val() + '"></td><td>false</td><td>false</td></tr>');
+
         }
 
         function selectChange(){
@@ -32,6 +41,36 @@
             else {
                 $("#newpartform").hide();
             }
+        }
+
+        function saveBoM() {
+
+            var parts = new Array();
+            var rows = $("#partstable tr:gt(0)");
+
+            rows.each(function (index) {
+                var id = $("td", this)[0].innerText;
+                console.log(id);
+                var quantity = $("td:nth-child(3) input", this).val();
+                console.log(quantity);
+                parts.push({
+                    id: id,
+                    quantity: quantity
+                });
+            });
+
+            var bomDict = {
+                name: $('#inputName').val(),
+                description: $('#inputDescription').val(),
+                projid: $('#projid').val(),
+                parts: parts
+            };
+
+            $.post('/BoM/New/Create/', {bomdict: JSON.stringify(bomDict)}, function (data) {
+                        window.location.href = '/Projects/Detail/' + $('#projid').val() + '/';
+                    }
+            );
+
         }
     </script>
 {% endblock %}
@@ -81,14 +120,14 @@
                     {% if not bomtoparts %}
                         <p>No parts added to BoM</p>
                     {% endif %}
-                <hr />
                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#partModal">
                   Add/Create new part
                 </button>
                 <br />
             </form>
-            <button type="button" class="btn btn-default" onclick="">Create BoM</button>
-        <!-- Modal -->
+            <hr/>
+            <button type="button" class="btn btn-default" onclick="saveBoM();">Create BoM</button>
+            <!-- Modal -->
             <div class="modal fade" id="partModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -132,7 +171,8 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                      <button type="button" class="btn btn-primary" onclick="addSelectPartToBom();">Save changes
+                      </button>
                   </div>
                 </div><!-- /.modal-content -->
               </div><!-- /.modal-dialog -->

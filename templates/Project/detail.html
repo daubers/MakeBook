@@ -11,10 +11,10 @@
                     <h3 class="panel-title">Bills of Materials</h3>
                 </div>
                 <div class="panel-body">
-                    {% if boms %}
+                    {% if BoMs %}
                         <ul>
-                            {% for project in projects %}
-                                <li><a href="/BoM/Detail/{{ boms.bom.id }}/">{{ boms.bom.name }}</a></li>
+                            {% for bom in BoMs %}
+                                <li><a href="/BoM/Detail/{{ bom.bom.id }}/">{{ bom.bom.name }}</a></li>
                             {% endfor %}
                         </ul>
                     {% else %}
@@ -36,8 +36,8 @@
                 </div>
                 <div class="panel-body">
                     {% if projects %}
-                        <ul>
-                            {% for project in projects %}
+                        <ul class="unstyled">
+                        {% for project in projects %}
                                 <li><a href="/Project/Detail/{{ project.id }}/">{{ project.title }}</a></li>
                             {% endfor %}
                         </ul>
@@ -52,8 +52,8 @@
                 </div>
                 <div class="panel-body">
                     {% if orders %}
-                        <ul>
-                            {% for order in orders %}
+                        <ul class="unstyled">
+                        {% for order in orders %}
                                 <li><a href="/Order/{{ order.id }}">{{ order.part.name }}</a></li>
                             {% endfor %}
                         </ul>
@@ -68,8 +68,8 @@
                 </div>
                 <div class="panel-body">
                     {% if deliveries %}
-                        <ul>
-                            {% for delivery in deliveries %}
+                        <ul class="unstyled">
+                        {% for delivery in deliveries %}
                                 <li><a href="/Order/{{ order.id }}">{{ order.part.name }}</a></li>
                             {% endfor %}
                         </ul>

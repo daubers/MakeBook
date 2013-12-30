@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, HttpResponse, RequestContext, Http404
-from models import Project, Part, BoMToParts, BoMtoProject
+from models import Project, Part, BoMToParts, BoMtoProject, BoM
 
 import json
 import datetime
@@ -113,3 +113,36 @@ def new_part(request):
             returndict['error'] = e.message
 
     return HttpResponse(json.dumps(returndict), content_type="application/json")
+
+
+def create_bom_ajax(request):
+    """
+        Method to create a new bom
+    """
+    returnDict = {}
+    if request.method == 'POST':
+        try:
+            bomdict = json.loads(request.POST['bomdict'])
+            bom = BoM()
+            bom.name = bomdict['name']
+            bom.description = bomdict['description']
+            bom.save()
+
+            for part in bomdict['parts']:
+                mainpart = Part.objects.filter(id=part['id']).get()
+                bomtoparts = BoMToParts()
+                bomtoparts.bom = bom
+                bomtoparts.part = mainpart
+                bomtoparts.quantity = part['quantity']
+                bomtoparts.save()
+
+            bomtoproject = BoMtoProject()
+            bomtoproject.bom = bom
+            bomtoproject.project = Project.objects.filter(id=bomdict['projid']).get()
+            bomtoproject.save()
+
+            returnDict['id'] = bom.id
+        except Exception, e:
+            returnDict['error'] = e.message
+
+    return HttpResponse(json.dumps(returnDict), content_type="application/json")

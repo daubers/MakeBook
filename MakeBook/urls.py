@@ -15,8 +15,9 @@ urlpatterns = patterns('',
                        url(r'^Projects/New/Create/$', "Project.views.create_new_project"),
 
                        url(r'^BoM/New/$', "Project.views.create_bom"),
+                       url(r'^BoM/New/Create/$', "Project.views.create_bom_ajax"),
 
-                        url(r'^Parts/New/Create/$', "Project.views.new_part"),
+                       url(r'^Parts/New/Create/$', "Project.views.new_part"),
 
                        url(r'^admin/', include(admin.site.urls)),
 )
