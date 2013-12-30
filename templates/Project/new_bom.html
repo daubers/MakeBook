@@ -11,12 +11,15 @@
         });
         function processForm(){
             var formDict = {
-                name: $('#inputName').val(),
-                startDate: $('#startDate').val(),
-                category: $('#inputCategory').val()
+                name: $('#inputPartName').val(),
+                source: $('#inputPartSource').val(),
+                description: $('#inputPartDescription').val(),
+                cost: $('#inputPartCost').val()
             }
-            $.post('/Projects/New/Create/', {projectdata: JSON.stringify(formDict)},function(data) {
-                        window.location.href = '/Projects/';
+            $.post('/Parts/New/Create/', {newpart: JSON.stringify(formDict)},function(data) {
+                        returndict = data;
+                       $('#partstable tr:last').after('<tr><td>'+returndict.id+'</td><td>'+formDict.name+'</td><td><input type="number" id="quantity-"'+returndict.id+'"></td><td>false</td><td>false</td></tr>');
+                       $("#partModal").modal('toggle');
                     }
             );
         }
@@ -82,56 +85,58 @@
                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#partModal">
                   Add/Create new part
                 </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="partModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Create New Part</h4>
-                      </div>
-                      <div class="modal-body">
-                        <div id="selectPart">
-                            <select id="partselect" class="form-control" onchange="selectChange();">
-                                <option value="new">Create New Part</option>
-                            </select>
-                        </div>
-                        <hr />
-                        <div id="newpartform">
-                            <form role="form" name="part_form">
-                                <div class="form-group">
-                                    <label for="inputPartName">Part Name</label>
-                                    <input type="text" class="form-control" id="inputPartName" placeholder="Enter part name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPartSource">Part Source</label>
-                                    <input type="text" class="form-control" id="inputPartSource" placeholder="Enter part source">
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPartDescription">Part Description</label>
-                                    <input type="text" class="form-control" id="inputPartDescription" placeholder="Enter part description">
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPartDescription">Part Cost</label>
-                                    <input type="number" step="0.10" class="form-control" id="inputPartCost" placeholder="Enter part cost">
-                                </div>
-                            </form>
-                            <button class="btn btn-primary btn-sm">
-                                Save and Add
-                            </button>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div><!-- /.modal-content -->
-                  </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
                 <br />
-                <button type="button" class="btn btn-default" onclick="processForm();">Create BoM</button>
             </form>
+            <button type="button" class="btn btn-default" onclick="">Create BoM</button>
+        <!-- Modal -->
+            <div class="modal fade" id="partModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Create New Part</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div id="selectPart">
+                        <select id="partselect" class="form-control" onchange="selectChange();">
+                            <option value="new">Create New Part</option>
+                            {%  for part in parts %}
+                                <option value="{{ part.id }}">{{ part.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <hr />
+                    <div id="newpartform">
+
+                            <div class="form-group">
+                                <label for="inputPartName">Part Name</label>
+                                <input type="text" class="form-control" id="inputPartName" placeholder="Enter part name">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPartSource">Part Source</label>
+                                <input type="text" class="form-control" id="inputPartSource" placeholder="Enter part source">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPartDescription">Part Description</label>
+                                <input type="text" class="form-control" id="inputPartDescription" placeholder="Enter part description">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPartDescription">Part Cost</label>
+                                <input type="number" step="0.10" class="form-control" id="inputPartCost" placeholder="Enter part cost">
+                            </div>
+
+                        <button class="btn btn-primary btn-sm" onclick="processForm();">
+                            Save and Add
+                        </button>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </div>
     </div>
 {% endblock %}

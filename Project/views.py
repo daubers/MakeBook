@@ -84,7 +84,9 @@ def create_bom(request):
     #We should have been posted a project id to start with.....
     if request.method == 'POST':
         project = Project.objects.filter(id=request.POST['projid']).get()
-        c = RequestContext(request, {'projid': project.id
+        parts = Part.objects.all()
+        c = RequestContext(request, {'projid': project.id,
+                                     'parts': parts
                                      })
         return render_to_response('Project/new_bom.html', c)
     else:
@@ -96,3 +98,18 @@ def new_part(request):
         Ajax method to create a new part
         returns the new parts id on success and false on failure
     """
+    returndict = {}
+    if request.method == 'POST':
+        try:
+            partdict = json.loads(request.POST['newpart'])
+            newpart = Part()
+            newpart.name = partdict['name']
+            newpart.source = partdict['source']
+            newpart.description = partdict['description']
+            newpart.cost = float(partdict['cost'])
+            newpart.save()
+            returndict['id'] = newpart.id
+        except Exception, e:
+            returndict['error'] = e.message
+
+    return HttpResponse(json.dumps(returndict), content_type="application/json")

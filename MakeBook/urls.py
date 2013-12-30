@@ -16,5 +16,7 @@ urlpatterns = patterns('',
 
                        url(r'^BoM/New/$', "Project.views.create_bom"),
 
+                        url(r'^Parts/New/Create/$', "Project.views.new_part"),
+
                        url(r'^admin/', include(admin.site.urls)),
 )
