@@ -68,6 +68,7 @@ def project_detail(request, newid="0"):
     """
         Get's all of the detail for a specific project
     """
+
     newid = int(newid)
     project = Project.objects.filter(id=newid).get()
     boms = BoMtoProject.objects.filter(project=project).all()
