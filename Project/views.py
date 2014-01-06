@@ -147,3 +147,10 @@ def create_bom_ajax(request):
             returnDict['error'] = e.message
 
     return HttpResponse(json.dumps(returnDict), content_type="application/json")
+
+
+def bom_detail(request, bomid):
+    """
+        Shows all the bom details
+    """
+    bom = BoM.objects.filter(id=bomid).all()
