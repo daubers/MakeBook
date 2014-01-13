@@ -153,4 +153,10 @@ def bom_detail(request, bomid):
     """
         Shows all the bom details
     """
-    bom = BoM.objects.filter(id=bomid).all()
+    bom = BoM.objects.filter(id=bomid).get()
+    parts = BoMToParts.objects.filter(bom=bom).all()
+    c = RequestContext(request, {
+        'bom': bom,
+        'parts': parts
+    })
+    return render_to_response('Project/bom_detail.html', c)

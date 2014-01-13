@@ -2,88 +2,39 @@
 
 {% block contents %}
     <div class="page-header">
-        <h1>Project Detail - {{ project.title }}</h1>
+        <h1>BoM Detail - {{ bom.name }}</h1>
     </div>
     <div class="row">
-        <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Bills of Materials</h3>
-                </div>
-                <div class="panel-body">
-                    {% if BoMs %}
-                        <ul>
-                            {% for bom in BoMs %}
-                                <li><a href="/BoM/Detail/{{ bom.bom.id }}/">{{ bom.bom.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        No BoMs
-                    {% endif %}
-                    <hr/>
-                    <form action="/BoM/New/" method="post" id="BoMForm">
-                        {% csrf_token %}
-                        <input type="hidden" name="projid" value="{{ project.id }}"/>
-                    </form>
-                    <button type="button" class="btn btn-default btn-sm" onclick="$('#BoMForm').submit();">
-                        <span class="glyphicon glyphicon-plus-sign"></span>
-                    </button>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Current Tasks</h3>
-                </div>
-                <div class="panel-body">
-                    {% if projects %}
-                        <ul class="unstyled">
-                            {% for project in projects %}
-                                <li><a href="/Project/Detail/{{ project.id }}/">{{ project.title }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        No projects
-                    {% endif %}
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Recent Orders</h3>
-                </div>
-                <div class="panel-body">
-                    {% if orders %}
-                        <ul class="unstyled">
-                            {% for order in orders %}
-                                <li><a href="/Order/{{ order.id }}">{{ order.part.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        No orders placed
-                    {% endif %}
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Expected Deliveries</h3>
-                </div>
-                <div class="panel-body">
-                    {% if deliveries %}
-                        <ul class="unstyled">
-                            {% for delivery in deliveries %}
-                                <li><a href="/Order/{{ order.id }}">{{ order.part.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        No deliveries expected
-                    {% endif %}
-                </div>
-            </div>
+        <div class="col-sm-10">
+            <p>{{ bom.description }}</p>
         </div>
-        <!-- /.col-sm-4 -->
+    </div>
+    <div class="row">
         <div class="col-sm-7">
-            <p>MakeBook is your one stop shop for information on your ongoing projects. Select a menu item from the top,
-                or
-                an item from the left to begin </p>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Part Name</th>
+                    <th>Part Source</th>
+                    <th>Part Description</th>
+                    <th>Cost</th>
+                    <th>Quantity</th>
+                    <th>Total Cost</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for part in parts %}
+                    <tr>
+                        <td>{{ part.part.name }}</td>
+                        <td>{{ part.part.source }}</td>
+                        <td>{{ part.part.description }}</td>
+                        <td>{{ part.part.cost }}</td>
+                        <td>{{ part.quantity }}</td>
+                        <td id="total_cost"></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}
