@@ -1,5 +1,22 @@
 {% extends "base.html" %}
 
+{% block head %}
+
+    <script type="text/javascript">
+        function saveTask() {
+            task_name = $("#tasktitle").val();
+            task_description = $("#taskdescription").val();
+            $.post("/Projects/Detail/{{ project.id }}/AddTask/", {datadict: JSON.stringify({task_title: task_name,
+                task_description: task_description})}, function (response) {
+                $('#addtaskmodal').modal('toggle');
+                alert(response);
+            });
+        }
+
+    </script>
+
+{% endblock %}
+
 {% block contents %}
     <div class="page-header">
         <h1>Project Detail - {{ project.title }}</h1>
@@ -35,18 +52,18 @@
                     <h3 class="panel-title">Current Tasks</h3>
                 </div>
                 <div class="panel-body">
-                    {% if projects %}
+                    {% if tasks %}
                         <ul class="unstyled">
-                        {% for project in projects %}
-                                <li><a href="/Project/Detail/{{ project.id }}/">{{ project.title }}</a></li>
+                            {% for task in tasks %}
+                                <li>{{ task.title }}</li>
                             {% endfor %}
                         </ul>
                     {% else %}
                         No projects
                     {% endif %}
                     <hr/>
-                    <button type="button" class="btn btn-default btn-sm" onclick="">
-                        <span class="glyphicon glyphicon-plus-sign"></span>
+                    <button type="button" class="btn btn-default btn-sm" onclick="$('#addtaskmodal').modal('toggle')">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
                     </button>
                 </div>
             </div>
@@ -90,4 +107,31 @@
                 an item from the left to begin </p>
         </div>
     </div>
+    <div class="modal fade" id="addtaskmodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create Task</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="tasktitle" class="form-control">Task Title</label>
+                        <input type="text" id="tasktitle" class="form-control" placeholder="Title"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskdescription" class="form-control">Task Description</label>
+                        <textarea id="taskdescription" class="form-control"
+                                  placeholder="Describe your task here"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveTask();">Save</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 {% endblock %}

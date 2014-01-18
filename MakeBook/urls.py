@@ -11,6 +11,7 @@ urlpatterns = patterns('',
                        url(r'^$', "Project.views.index"),
                        url(r'^Projects/$', "Project.views.all_projects"),
                        url(r'^Projects/Detail/(?P<newid>\d+)/$', "Project.views.project_detail"),
+                       url(r'^Projects/Detail/(?P<id>\d+)/AddTask/$', "Project.views.add_task_ajax"),
                        url(r'^Projects/New/$', "Project.views.new_project"),
                        url(r'^Projects/New/Create/$', "Project.views.create_new_project"),
 
