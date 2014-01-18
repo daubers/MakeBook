@@ -89,6 +89,7 @@ class Task(models.Model):
     title = models.TextField(max_length=255)
     description = models.TextField()
     date_added = models.DateTimeField()
+    priority = models.IntegerField(default=1)
     completed = models.BooleanField()
 
 

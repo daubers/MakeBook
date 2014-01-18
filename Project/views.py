@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, HttpResponse, RequestContext, Http404
-from models import Project, Part, BoMToParts, BoMtoProject, BoM
+from models import Project, Part, BoMToParts, BoMtoProject, BoM, Task, TaskToProject
 
 import json
 import datetime
@@ -72,9 +72,12 @@ def project_detail(request, newid="0"):
     newid = int(newid)
     project = Project.objects.filter(id=newid).get()
     boms = BoMtoProject.objects.filter(project=project).all()
+    tasks_links = TaskToProject.objects.filter(project=project).all()
+    tasks = [i.task for i in tasks_links]
     c = RequestContext(request, {'project': project,
-                                 'BoMs': boms
-                                 })
+                                 'BoMs': boms,
+                                 'tasks': tasks
+    })
     return render_to_response('Project/detail.html', c)
 
 
@@ -160,3 +163,31 @@ def bom_detail(request, bomid):
         'parts': parts
     })
     return render_to_response('Project/bom_detail.html', c)
+
+
+def add_task_ajax(request, id):
+    """
+        Simple routine to add a task to a project
+        TODO: finish this :)
+    """
+    returnDict = {}
+    if request.method == 'POST':
+        try:
+            taskdict = json.loads(request.POST['datadict'])
+            task = Task()
+            task.completed = False
+            task.date_added = datetime.datetime.now()
+            task.title = taskdict['task_title']
+            task.description = taskdict['task_description']
+            task.save()
+
+            link = TaskToProject()
+            link.task = task
+            link.project = Project.objects.filter(id=id).get()
+            link.save()
+
+            returnDict['id'] = task.id
+        except Exception, e:
+            returnDict['error'] = e.message
+
+    return HttpResponse(json.dumps(returnDict), content_type="application/json")
