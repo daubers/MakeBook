@@ -191,3 +191,16 @@ def add_task_ajax(request, id):
             returnDict['error'] = e.message
 
     return HttpResponse(json.dumps(returnDict), content_type="application/json")
+
+
+def toggle_task(request, id, projid):
+    """
+        Toggles a tasks completion status
+    """
+    task = Task.objects.filter(id=id).get()
+    if task.completed:
+        task.completed = False
+    elif not task.completed:
+        task.completed = True
+    task.save()
+    return HttpResponse(json.dumps({}), content_type="application/json")
