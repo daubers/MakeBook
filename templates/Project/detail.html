@@ -9,10 +9,22 @@
             $.post("/Projects/Detail/{{ project.id }}/AddTask/", {datadict: JSON.stringify({task_title: task_name,
                 task_description: task_description})}, function (response) {
                 $('#addtaskmodal').modal('toggle');
-                alert(response);
             });
         }
 
+        function toggleTask(id, caller) {
+            $.post("/Projects/Detail/{{ project.id }}/ToggleTask/"+id+"/");
+            if (caller.hasClass("glyphicon-ok-circle")){
+                caller.removeClass("glyphicon-ok-circle");
+                caller.addClass("glyphicon-remove-circle");
+                caller.css("color","red");
+            } else {
+                caller.removeClass("glyphicon-remove-circle");
+                caller.addClass("glyphicon-ok-circle");
+                caller.css("color","green");
+            }
+
+        }
     </script>
 
 {% endblock %}
@@ -53,11 +65,23 @@
                 </div>
                 <div class="panel-body">
                     {% if tasks %}
-                        <ul class="unstyled">
+                       <table class="table">
+                            <thead>
+                                <tr><th>Priority</th><th>Title</th><th>Complete</th></tr>
+                            </thead>
+                            <tbody>
                             {% for task in tasks %}
-                                <li>{{ task.title }}</li>
+                                <tr><td>{{ task.priority }}</td><td>{{ task.title }}</td>
+                                <td>{% if task.completed %}
+                                        <span class="glyphicon glyphicon-ok-circle" style="color: green" onclick="toggleTask({{ task.id }}, $(this));"></span>
+                                    {% else %}
+                                        <span class="glyphicon glyphicon-remove-circle" style="color: red;" onclick="toggleTask({{ task.id }}, $(this));"></span>
+                                    {% endif %}
+                                </td>
+                                </tr>
                             {% endfor %}
-                        </ul>
+                            </tbody>
+                        </table>
                     {% else %}
                         No projects
                     {% endif %}
