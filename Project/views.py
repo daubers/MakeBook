@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, HttpResponse, RequestContext, Http404
-from models import Project, Part, BoMToParts, BoMtoProject, BoM, Task, TaskToProject
+from models import Project, Part, BoMToParts, BoMtoProject, BoM, TaskToProject, Task
 
 import json
 import datetime
@@ -204,3 +204,11 @@ def toggle_task(request, id, projid):
         task.completed = True
     task.save()
     return HttpResponse(json.dumps({}), content_type="application/json")
+
+
+def new_order(request):
+    """
+        Page for creating a new order
+    """
+
+    return render_to_response('Project/new_order.html', {})

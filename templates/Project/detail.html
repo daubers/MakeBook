@@ -99,7 +99,7 @@
                     {% if orders %}
                         <ul class="unstyled">
                         {% for order in orders %}
-                            <li><a href="/Order/{{ order.id }}//">{{ order.part.name }}</a></li>
+                            <li><a href="/Order/{{ order.id }}">{{ order.part.name }}</a></li>
                         {% endfor %}
                         </ul>
                     {% else %}

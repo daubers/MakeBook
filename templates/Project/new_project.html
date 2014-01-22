@@ -9,13 +9,13 @@
             $('#startDate').datepicker();
 
         });
-        function processForm(){
+        function processForm() {
             var formDict = {
                 name: $('#inputName').val(),
                 startDate: $('#startDate').val(),
                 category: $('#inputCategory').val()
             }
-            $.post('/Projects/New/Create/', {projectdata: JSON.stringify(formDict)},function(data) {
+            $.post('/Projects/New/Create/', {projectdata: JSON.stringify(formDict)}, function (data) {
                         window.location.href = '/Projects/';
                     }
             );
@@ -39,9 +39,10 @@
                 </div>
                 <div class="form-group">
                     <label for="startDate">Start Date</label>
+
                     <div class="input-append date" id="dp3" data-date="12/02/2012" data-date-format="dd-mm-yyyy">
-                      <input class="span2" size="16" type="text" value="12/02/2012" id="startDate">
-                      <span class="add-on"><i class="icon-th"></i></span>
+                        <input class="span2" size="16" type="text" value="12/02/2012" id="startDate">
+                        <span class="add-on"><i class="icon-th"></i></span>
                     </div>
                 </div>
                 <div class="form-group">

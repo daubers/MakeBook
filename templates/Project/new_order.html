@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block contents %}
+
+    <div class="page-header">
+        <h1>Create Order</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label for="supplier" class="form-control">Supplier</label>
+                <select class="form-control" id="supplier">
+                    {% if suppliers %}
+                        {% for supplier in suppliers %}
+                            <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <button class="btn btn-primary btn-sm" onclick="$('#supplierModal').modal('toggle');">New Supplier
+                </button>
+            </div>
+            <div class="form-group">
+                <label for="account" class="form-control">Account Number</label>
+                <select class="form-control" id="account">
+                    <option value="none">No Account</option>
+                </select>
+                <button class="btn btn-primary btn-sm" onclick="$('#accountModal').modal('toggle');">New Account
+                </button>
+            </div>
+            <div class="form-group">
+                <table class="table" id="parts_table">
+                    <thead>
+                    <tr>
+                        <th>Quantity</th>
+                        <th>Part Number</th>
+                        <th>Part Description</th>
+                        <th>Cost</th>
+                        <th>Total Cost</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <button class="btn btn-primary btn-sm" onclick="$('#partModal').modal('toggle');">Add Part</button>
+                <button class="btn btn-primary btn-sm" onclick="updatePartTable()">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="supplierModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Create New Supplier</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="newpartform">
+                        <div class="form-group">
+                            <label for="supplier_name" class="form-control">Supplier Name</label>
+                            <input type="text" id="supplier_name" placeholder="Supplier Name" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplier_url" class="form-control">Supplier URL</label>
+                            <input type="text" id="supplier_url" class="form-control"
+                                   placeholder="http://supplier.com"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="processSupplierForm();">Save changes
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Create New Supplier Account</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="newpartform">
+                        <div class="form-group">
+                            <label for="supplier_name" class="form-control">Supplier Name</label>
+                            <input type="text" id="supplier_name" placeholder="Supplier Name" class="form-control"
+                                   disabled="True"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="account_number" class="form-control">Account Number</label>
+                            <input type="text" id="account_number" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="processAccountForm();">Save changes
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="partModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Add Part</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addPart();">Save changes
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}

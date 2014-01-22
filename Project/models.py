@@ -117,3 +117,39 @@ class ImageToProject(models.Model):
     """
     project = models.ForeignKey(Project)
     image = models.ForeignKey(Image)
+
+
+class Supplier(models.Model):
+    """
+        Describes a single supplier
+    """
+    name = models.TextField()
+    url = models.TextField()
+
+
+class SupplierAccount(models.Model):
+    """
+        Describes an account at a supplier
+    """
+    supplier = models.ForeignKey(Supplier)
+    account_number = models.TextField()
+
+
+class Order(models.Model):
+    """
+        Describes an order
+    """
+    date_placed = models.DateField()
+    supplier = models.ForeignKey(Supplier)
+    account = models.ForeignKey(SupplierAccount, null=True, default=None)
+    expected_delivery = models.DateField()
+
+
+class PartsToOrder(models.Model):
+    """
+        Link parts to an order
+    """
+    order = models.ForeignKey(Order)
+    part = models.ForeignKey(Part)
+    part_cost = models.FloatField()
+    quantity = models.IntegerField()
