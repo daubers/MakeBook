@@ -107,6 +107,7 @@ def new_part(request):
         try:
             partdict = json.loads(request.POST['newpart'])
             newpart = Part()
+            newpart.number = partdict['number']
             newpart.name = partdict['name']
             newpart.source = partdict['source']
             newpart.description = partdict['description']
@@ -210,5 +211,5 @@ def new_order(request):
     """
         Page for creating a new order
     """
-
-    return render_to_response('Project/new_order.html', {})
+    parts = Part.objects.all()
+    return render_to_response('Project/new_order.html', {"parts": parts, })

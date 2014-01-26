@@ -25,6 +25,7 @@ class Part(models.Model):
     """
         This model describes a single part
     """
+    number = models.TextField()
     name = models.TextField(max_length=255)
     source = models.TextField()
     description = models.TextField()
