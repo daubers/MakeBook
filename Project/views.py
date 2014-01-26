@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response, HttpResponse, RequestContext, Http404
-from models import Project, Part, BoMToParts, BoMtoProject, BoM, TaskToProject, Task
+from models import Project, Part, BoMToParts, BoMtoProject, BoM, TaskToProject, Task, Supplier, SupplierAccount
+
 
 import json
 import datetime
@@ -212,4 +213,59 @@ def new_order(request):
         Page for creating a new order
     """
     parts = Part.objects.all()
-    return render_to_response('Project/new_order.html', {"parts": parts, })
+    suppliers = Supplier.objects.all()
+    return render_to_response('Project/new_order.html', {"parts": parts, "suppliers": suppliers, })
+
+
+def create_supplier_ajax(request):
+    """
+        Simple routine to add a supplier
+        TODO: finish this :)
+    """
+    returnDict = {}
+    if request.method == 'POST':
+        try:
+            supplier_dict = json.loads(request.POST['datadict'])
+            supplier = Supplier()
+            supplier.name = supplier_dict['supplier_name']
+            supplier.url = supplier_dict['supplier_url']
+            supplier.save()
+            returnDict['id'] = supplier.id
+        except Exception, e:
+            returnDict['error'] = e.message
+
+    return HttpResponse(json.dumps(returnDict), content_type="application/json")
+
+
+def create_account_ajax(request):
+    """
+        Simple routine to add an account to a supplier
+    """
+    returnDict = {}
+    if request.method == 'POST':
+        try:
+            datadict = json.loads(request.POST['datadict'])
+            supplier = Supplier.objects.get(id=datadict['supplier_id'])
+            account = SupplierAccount()
+            account.supplier = supplier
+            account.account_number = datadict['account_number']
+            account.save()
+            returnDict['id'] = account.id
+        except Exception, e:
+            returnDict['error'] = e.message
+    return HttpResponse(json.dumps(returnDict), content_type="application/json")
+
+
+def get_accounts_ajax(request):
+    returnList = []
+    if request.method == 'POST':
+        try:
+            accounts = SupplierAccount.objects.filter(supplier=Supplier.objects.filter(id=request.POST['id']).get()).all()
+            for account in accounts:
+                tmpDict = {}
+                tmpDict['id'] = account.id
+                tmpDict['account_number'] = account.account_number
+                returnList.append(tmpDict)
+        except Exception, e:
+            pass
+    return HttpResponse(json.dumps(returnList), content_type="application/json")

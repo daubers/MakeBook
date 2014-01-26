@@ -24,5 +24,12 @@ urlpatterns = patterns('',
 
                        url(r'^Parts/New/Create/$', "Project.views.new_part"),
 
+                       url(r'^Supplier/New/Create/$', "Project.views.create_supplier_ajax"),
+
+                       url(r'^Supplier/Account/New/Create/$', "Project.views.create_account_ajax"),
+                       url(r'^Supplier/Account/Get/$', "Project.views.get_accounts_ajax"),
+
+
+
                        url(r'^admin/', include(admin.site.urls)),
 )

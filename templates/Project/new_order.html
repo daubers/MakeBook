@@ -11,7 +11,55 @@
         $(document).ready(function () {
             $("#addPartTable").dataTable();
             $("#estArrivalDate").datepicker();
+            updateAccounts();
         });
+
+        function processSupplierForm(){
+            var post_data = {
+                supplier_name : $("#supplier_name").val(),
+                supplier_url : $("#supplier_url").val()
+            }
+            $.post('/Supplier/New/Create/', {datadict : JSON.stringify(post_data)}, function(data){
+                $("#supplier").append($("<option></option>")
+                              .attr("value",data.id)
+                              .attr("selected", true)
+                              .text(post_data.supplier_name));
+                $('#supplierModal').modal('toggle');
+            })
+        }
+
+
+        function updateAccounts(){
+            $.post('/Supplier/Account/Get/', { id : $("#supplier").val() },function(data){
+                $("#account option").remove();
+                if (data.length == 0){
+                    $("#account").append($("<option></option>")
+                                  .attr("value",null)
+                                  .attr("selected", true)
+                                  .text("No Account"));
+                }
+                data.forEach(function(entry) {
+                    $("#account").append($("<option></option>")
+                                  .attr("value",entry.id)
+                                  .attr("selected", true)
+                                  .text(entry.account_number));
+                });
+            })
+        }
+
+        function processAccountForm(){
+            var post_data = {
+                supplier_id : $("#supplier").val(),
+                account_number : $("#account_number").val()
+            }
+            $.post('/Supplier/Account/New/Create/', {datadict : JSON.stringify(post_data)}, function(data){
+                $("#account").append($("<option></option>")
+                              .attr("value",data.id)
+                              .attr("selected", true)
+                              .text(post_data.account_number));
+                $('#accountModal').modal('toggle');
+            });
+        }
     </script>
 {% endblock %}
 
@@ -26,7 +74,7 @@
         <div class="col-sm-8">
             <div class="form-group">
                 <label for="supplier" class="form-control">Supplier</label>
-                <select class="form-control" id="supplier">
+                <select class="form-control" id="supplier" onchange="updateAccounts();">
                     {% if suppliers %}
                         {% for supplier in suppliers %}
                             <option value="{{ supplier.id }}">{{ supplier.name }}</option>
