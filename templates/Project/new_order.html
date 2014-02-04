@@ -48,6 +48,16 @@
             })
         }
 
+        function sumCost(){
+             var rows = $("#parts_table tbody tr");
+             var totalCost = 0.0;
+             rows.each(function(index) {
+                var tmpNum = Number($("td:nth-child(1) input", this).val())*Number($("td:nth-child(4)", this).text());
+                totalCost += tmpNum;
+             });
+             $("#totalCost").text("£" + (Math.round(totalCost*100)/100).toFixed(2));
+        }
+
         function processAccountForm(){
             var post_data = {
                 supplier_id : $("#supplier").val(),
@@ -67,7 +77,7 @@
 
             rows.each(function(index) {
                 if ($("td:nth-child(5) input", this).is(':checked')){
-                    $('#parts_table tr:last').after('<tr><td><input type="text" class="form-control" ' +
+                    $('#parts_table tbody').append('<tr><td><input type="text" class="form-control" ' +
                             'placeholder="Quantity" id="'+$("td:nth-child(1)", this).text()+'-quantity" ' +
                             'onchange="recostParts(\''+$("td:nth-child(1)", this).text()+'\')"' +
                             '></td><td>'+$("td:nth-child(1)", this).text()+'</td>' +
@@ -83,6 +93,7 @@
 
         function recostParts(id){
             $("#"+id+"-total").text(Number($("#"+id+"-quantity").val())*Number($("#"+id+"-cost").text()));
+            sumCost();
         }
     </script>
 {% endblock %}
@@ -127,9 +138,13 @@
                         <th>Total Cost</th>
                     </tr>
                     </thead>
+
                     <tbody>
 
                     </tbody>
+                    <tfoot>
+                        <tr><td></td><td></td><td></td><th>Total</th><td id="totalCost">£0.00</td></tr>
+                    </tfoot>
                 </table>
                 <button class="btn btn-primary btn-sm" onclick="$('#partModal').modal('toggle');">Add Part</button>
                 <button class="btn btn-primary btn-sm" onclick="updatePartTable()">Update</button>
