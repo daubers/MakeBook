@@ -308,3 +308,15 @@ def get_accounts_ajax(request):
         except Exception, e:
             pass
     return HttpResponse(json.dumps(returnList), content_type="application/json")
+
+
+def orders(request):
+    """
+        Orders Home Page
+    """
+    recent_orders = Order.objects.all()[:5]
+    all_orders = Order.objects.all()
+    recent_arrivals = Order.objects.filter(date_arrived__range=[datetime.datetime.now(), datetime.datetime.now() -
+                                                                                        (datetime.timedelta(days=14))])
+    return render_to_response('Project/orders.html', {'recent_orders': recent_orders, 'all_orders': all_orders,
+                                                      'recent_arrivals': recent_arrivals })

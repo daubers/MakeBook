@@ -5,6 +5,6 @@ h1.page-title, h3.panel-title, html, a.navbar-brand {
     font-family: 'Audiowide', cursive;
 }
 
-div.panel-body, p, html, ul.navbar-nav li {
+ul.navbar-nav li {
     font-family: 'Oswald', sans-serif;
 }

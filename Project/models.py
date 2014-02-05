@@ -144,6 +144,7 @@ class Order(models.Model):
     supplier = models.ForeignKey(Supplier)
     account = models.ForeignKey(SupplierAccount, null=True, default=None)
     expected_delivery = models.DateField()
+    date_arrived = models.DateField(null=True)
 
 
 class PartsToOrder(models.Model):

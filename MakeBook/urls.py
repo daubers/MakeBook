@@ -20,6 +20,7 @@ urlpatterns = patterns('',
                        url(r'^BoM/New/Create/$', "Project.views.create_bom_ajax"),
                        url(r'^BoM/Detail/(?P<bomid>\d+)/$', "Project.views.bom_detail"),
 
+                       url(r'^Order/$', "Project.views.orders"),
                        url(r'^Order/New/$', "Project.views.new_order"),
                        url(r'^Order/New/Create/$', "Project.views.place_order_ajax"),
 
