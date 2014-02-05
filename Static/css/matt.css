@@ -1,0 +1,10 @@
+@import url(http://fonts.googleapis.com/css?family=Audiowide);
+@import url(http://fonts.googleapis.com/css?family=Josefin+Sans:400,300italic);
+
+h1.page-title, h3.panel-title, html, a.navbar-brand {
+    font-family: 'Audiowide', cursive;
+}
+
+div.panel-body, p, html, ul.navbar-nav li {
+    font-family: 'Josefin Sans', sans-serif;
+}

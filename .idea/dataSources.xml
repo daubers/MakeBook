@@ -2,14 +2,15 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" hash="2901813598">
     <data-source source="LOCAL" name="Django default" uuid="f1aab038-6b16-4f01-95e7-c8d893c14204">
+      <driver-ref>sqlite.xerial</driver-ref>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\Matthew\PyCharm Projects\MakeBook\db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db.sqlite3</jdbc-url>
       <libraries>
         <library>
-          <url>jar://$PROJECT_DIR$/../../.PyCharm30/system/extResources/sqlitejdbc-v056.jar!/</url>
+          <url>jar://$USER_HOME$/.PyCharm30/system/extResources/sqlite-jdbc-3.7.6.3-20110609.081603-3.jar!/</url>
         </library>
         <library>
-          <url>file://$PROJECT_DIR$/../../.PyCharm30/system/extResources/zentus-sqlite-license.txt</url>
+          <url>file://$USER_HOME$/.PyCharm30/system/extResources/xerial-sqlite-license.txt</url>
         </library>
       </libraries>
     </data-source>
