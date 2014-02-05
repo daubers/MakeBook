@@ -21,6 +21,7 @@ urlpatterns = patterns('',
                        url(r'^BoM/Detail/(?P<bomid>\d+)/$', "Project.views.bom_detail"),
 
                        url(r'^Order/New/$', "Project.views.new_order"),
+                       url(r'^Order/New/Create/$', "Project.views.place_order_ajax"),
 
                        url(r'^Parts/New/Create/$', "Project.views.new_part"),
 

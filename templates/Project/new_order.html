@@ -35,7 +35,7 @@
                 $("#account option").remove();
                 if (data.length == 0){
                     $("#account").append($("<option></option>")
-                                  .attr("value",null)
+                                  .attr("value","none")
                                   .attr("selected", true)
                                   .text("No Account"));
                 }
@@ -95,13 +95,36 @@
             $("#"+id+"-total").text(Number($("#"+id+"-quantity").val())*Number($("#"+id+"-cost").text()));
             sumCost();
         }
+
+        function placeOrder(){
+
+            var rows = $("#parts_table tbody tr");
+            var parts = [];
+            rows.each(function(index) {
+               var tmpPart = {
+                   part_number: $("td:nth-child(2)", this).text(),
+                   quantity: $("td:nth-child(1) input", this).val()
+               };
+               parts.push(tmpPart);
+            });
+            var formDict = {
+                supplier: $('#supplier').val(),
+                account: $('#account').val(),
+                parts: parts,
+                expected_delivery: $('#estArrivalDate').val()
+            }
+            $.post('/Order/New/Create/', {datadict: JSON.stringify(formDict)}, function (data) {
+                        window.location.href = '/Order/';
+                    }
+            );
+        }
     </script>
 {% endblock %}
 
 {% block contents %}
 
     <div class="page-header">
-        <h1>Create Order</h1>
+        <h1 class="page-title">Create Order</h1>
     </div>
     <div class="row">
         <div class="col-sm-2">
@@ -152,6 +175,9 @@
             <div class="form-group">
                 <label for="estArrivalDate" class="form-control">Estimated Arrival Date</label>
                 <input type="datetime" id="estArrivalDate"/>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary btn-sm" onclick="placeOrder();">Save</button>
             </div>
         </div>
     </div>

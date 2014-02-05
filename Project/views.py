@@ -1,5 +1,7 @@
 from django.shortcuts import render_to_response, HttpResponse, RequestContext, Http404
-from models import Project, Part, BoMToParts, BoMtoProject, BoM, TaskToProject, Task, Supplier, SupplierAccount
+from models import Project, Part, BoMToParts, BoMtoProject, BoM, TaskToProject, Task, Supplier, SupplierAccount, Order
+from models import PartsToOrder
+
 
 
 import json
@@ -215,6 +217,43 @@ def new_order(request):
     parts = Part.objects.all()
     suppliers = Supplier.objects.all()
     return render_to_response('Project/new_order.html', {"parts": parts, "suppliers": suppliers, })
+
+
+def place_order_ajax(request):
+    """
+        Create a new order
+    """
+    returnDict = {}
+    if request.method == 'POST':
+        try:
+            #First raise the order as we'll need it for the second part :)
+            order_dict = json.loads(request.POST['datadict'])
+            order = Order()
+            order.supplier = Supplier.objects.filter(id=order_dict['supplier']).get()
+            if order_dict['account'] == "none":
+                order.account = None
+            else:
+                order.account = SupplierAccount.objects.filter(id=order_dict['account']).get()
+            order.expected_delivery = datetime.datetime.strptime(order_dict['expected_delivery'], "%m/%d/%Y")
+            order.date_placed = datetime.datetime.now()
+            order.save()
+            returnDict['order'] = order.id
+            #now add the parts in
+            parts_list = []
+            for part in order_dict['parts']:
+
+                orderpart = PartsToOrder()
+                orderpart.order = order
+                orderpart.part = Part.objects.filter(number=part['part_number']).get()
+                orderpart.quantity = float(part['quantity'])
+                orderpart.save()
+                parts_list.append(orderpart.id)
+            returnDict['parts_list'] = parts_list
+        except Exception, e:
+            print e
+            returnDict['error'] = e.message
+    print returnDict
+    return HttpResponse(json.dumps(returnDict), content_type="application/json")
 
 
 def create_supplier_ajax(request):

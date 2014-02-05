@@ -152,5 +152,4 @@ class PartsToOrder(models.Model):
     """
     order = models.ForeignKey(Order)
     part = models.ForeignKey(Part)
-    part_cost = models.FloatField()
     quantity = models.IntegerField()
