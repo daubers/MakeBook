@@ -30,6 +30,7 @@
 
 
         function updateAccounts(){
+            $("#supplier_name_account").val($("#supplier option:selected").text());
             $.post('/Supplier/Account/Get/', { id : $("#supplier").val() },function(data){
                 $("#account option").remove();
                 if (data.length == 0){
@@ -47,6 +48,16 @@
             })
         }
 
+        function sumCost(){
+             var rows = $("#parts_table tbody tr");
+             var totalCost = 0.0;
+             rows.each(function(index) {
+                var tmpNum = Number($("td:nth-child(1) input", this).val())*Number($("td:nth-child(4)", this).text());
+                totalCost += tmpNum;
+             });
+             $("#totalCost").text("£" + (Math.round(totalCost*100)/100).toFixed(2));
+        }
+
         function processAccountForm(){
             var post_data = {
                 supplier_id : $("#supplier").val(),
@@ -59,6 +70,30 @@
                               .text(post_data.account_number));
                 $('#accountModal').modal('toggle');
             });
+        }
+
+        function addPart(){
+            var rows = $("#addPartTable tr:gt(0)"); // skip the header row
+
+            rows.each(function(index) {
+                if ($("td:nth-child(5) input", this).is(':checked')){
+                    $('#parts_table tbody').append('<tr><td><input type="text" class="form-control" ' +
+                            'placeholder="Quantity" id="'+$("td:nth-child(1)", this).text()+'-quantity" ' +
+                            'onchange="recostParts(\''+$("td:nth-child(1)", this).text()+'\')"' +
+                            '></td><td>'+$("td:nth-child(1)", this).text()+'</td>' +
+                            '<td>'+$("td:nth-child(3)", this).text()+'</td>' +
+                            '<td id="'+$("td:nth-child(1)", this).text()+'-cost">'+$("td:nth-child(4)", this).text()+
+                            '</td>' +'<td id="'+$("td:nth-child(1)", this).text()+'-total"></td></tr>');
+                }
+            });
+            $('#partModal').modal('toggle');
+
+
+        }
+
+        function recostParts(id){
+            $("#"+id+"-total").text(Number($("#"+id+"-quantity").val())*Number($("#"+id+"-cost").text()));
+            sumCost();
         }
     </script>
 {% endblock %}
@@ -103,9 +138,13 @@
                         <th>Total Cost</th>
                     </tr>
                     </thead>
+
                     <tbody>
 
                     </tbody>
+                    <tfoot>
+                        <tr><td></td><td></td><td></td><th>Total</th><td id="totalCost">£0.00</td></tr>
+                    </tfoot>
                 </table>
                 <button class="btn btn-primary btn-sm" onclick="$('#partModal').modal('toggle');">Add Part</button>
                 <button class="btn btn-primary btn-sm" onclick="updatePartTable()">Update</button>
@@ -162,7 +201,7 @@
                     <div id="newpartform">
                         <div class="form-group">
                             <label for="supplier_name" class="form-control">Supplier Name</label>
-                            <input type="text" id="supplier_name" placeholder="Supplier Name" class="form-control"
+                            <input type="text" id="supplier_name_account" placeholder="Supplier Name" class="form-control"
                                    disabled="True"/>
                         </div>
                         <div class="form-group">
@@ -197,6 +236,7 @@
                             <th>Part Number</th>
                             <th>Part Name</th>
                             <th>Part Description</th>
+                            <th>Part Cost</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -206,6 +246,7 @@
                                 <td>{{ part.number }}</td>
                                 <td>{{ part.name }}</td>
                                 <td>{{ part.description }}</td>
+                                <td>{{ part.cost }}</td>
                                 <td><input type="checkbox" value="{{ part.id }}"/></td>
                             </tr>
                         {% endfor %}
