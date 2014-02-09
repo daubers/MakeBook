@@ -4,11 +4,18 @@
 
     <script type="text/javascript">
         function saveTask() {
-            task_name = $("#tasktitle").val();
-            task_description = $("#taskdescription").val();
+            var task_name = $("#tasktitle").val();
+            var task_description = $("#taskdescription").val();
             $.post("/Projects/Detail/{{ project.id }}/AddTask/", {datadict: JSON.stringify({task_title: task_name,
                 task_description: task_description})}, function (response) {
-                $('#addtaskmodal').modal('toggle');
+                if (!("error" in response)){
+                    $('#addtaskmodal').modal('toggle');
+                    $("#tasks tbody").append(" <tr><td>1</td><td>"+task_name+"</td>"
+                            +"<td><span class=\"glyphicon glyphicon-remove-circle\" style=\"color: red;\" " +
+                            "onclick=\"toggleTask("+response.id+", $(this));\"></span></td></tr>"
+                    );
+                    $("#no_tasks").css("visibility","hidden");
+                }
             });
         }
 
@@ -64,12 +71,14 @@
                     <h3 class="panel-title">Current Tasks</h3>
                 </div>
                 <div class="panel-body">
+                    <table class="table" id="tasks">
+                        <thead>
+                            <tr><th>Priority</th><th>Title</th><th>Complete</th></tr>
+                        </thead>
+                        <tbody>
                     {% if tasks %}
-                       <table class="table">
-                            <thead>
-                                <tr><th>Priority</th><th>Title</th><th>Complete</th></tr>
-                            </thead>
-                            <tbody>
+
+
                             {% for task in tasks %}
                                 <tr><td>{{ task.priority }}</td><td>{{ task.title }}</td>
                                 <td>{% if task.completed %}
@@ -83,8 +92,11 @@
                             </tbody>
                         </table>
                     {% else %}
-                        No projects
+                            </tbody>
+                        </table>
+                        <span id="no_tasks">No tasks</span>
                     {% endif %}
+
                     <hr/>
                     <button type="button" class="btn btn-default btn-sm" onclick="$('#addtaskmodal').modal('toggle')">
                     <span class="glyphicon glyphicon-plus-sign"></span>
