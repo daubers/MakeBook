@@ -31,7 +31,8 @@ urlpatterns = patterns('',
                        url(r'^Supplier/Account/New/Create/$', "Project.views.create_account_ajax"),
                        url(r'^Supplier/Account/Get/$', "Project.views.get_accounts_ajax"),
 
-
+                       url(r'^login/$', "Project.views.login"),
+                       url(r'^login/attempt/$', "Project.views.login_attempt"),
 
                        url(r'^admin/', include(admin.site.urls)),
 )

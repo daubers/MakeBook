@@ -91,3 +91,5 @@ STATICFILES_DIRS = (
     '/var/www/static/',
 )
 STATIC_URL = '/static/'
+
+LOGIN_URL="/login/"

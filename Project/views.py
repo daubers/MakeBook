@@ -1,7 +1,9 @@
 from django.shortcuts import render_to_response, HttpResponse, RequestContext, Http404
 from models import Project, Part, BoMToParts, BoMtoProject, BoM, TaskToProject, Task, Supplier, SupplierAccount, Order
 from models import PartsToOrder
-
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login as auth_login
 
 
 import json
@@ -9,6 +11,7 @@ import datetime
 # Create your views here.
 
 
+@login_required()
 def index(request):
     """
         The main index page
@@ -22,7 +25,7 @@ def index(request):
     #datadict['deliveries'] = deliveries
     return render_to_response('Project/index.html', datadict)
 
-
+@login_required()
 def all_projects(request):
     """
         The main projects page
@@ -35,6 +38,7 @@ def all_projects(request):
     return render_to_response('Project/projects.html', c)
 
 
+@login_required()
 def new_project(request):
     """
         Create a new project
@@ -43,6 +47,7 @@ def new_project(request):
     return render_to_response('Project/new_project.html', c)
 
 
+@login_required()
 def create_new_project(request):
     """
         Takes in an ajax request to create a new project
@@ -67,6 +72,7 @@ def create_new_project(request):
     return HttpResponse(json.dumps(returnDict), content_type="application/json")
 
 
+@login_required()
 def project_detail(request, newid="0"):
     """
         Get's all of the detail for a specific project
@@ -84,6 +90,7 @@ def project_detail(request, newid="0"):
     return render_to_response('Project/detail.html', c)
 
 
+@login_required()
 def create_bom(request):
     """
         Create a new bill of materials
@@ -100,6 +107,7 @@ def create_bom(request):
         raise Http404()
 
 
+@login_required()
 def new_part(request):
     """
         Ajax method to create a new part
@@ -123,6 +131,7 @@ def new_part(request):
     return HttpResponse(json.dumps(returndict), content_type="application/json")
 
 
+@login_required()
 def create_bom_ajax(request):
     """
         Method to create a new bom
@@ -156,6 +165,7 @@ def create_bom_ajax(request):
     return HttpResponse(json.dumps(returnDict), content_type="application/json")
 
 
+@login_required()
 def bom_detail(request, bomid):
     """
         Shows all the bom details
@@ -169,6 +179,7 @@ def bom_detail(request, bomid):
     return render_to_response('Project/bom_detail.html', c)
 
 
+@login_required()
 def add_task_ajax(request, id):
     """
         Simple routine to add a task to a project
@@ -197,6 +208,7 @@ def add_task_ajax(request, id):
     return HttpResponse(json.dumps(returnDict), content_type="application/json")
 
 
+@login_required()
 def toggle_task(request, id, projid):
     """
         Toggles a tasks completion status
@@ -210,6 +222,7 @@ def toggle_task(request, id, projid):
     return HttpResponse(json.dumps({}), content_type="application/json")
 
 
+@login_required()
 def new_order(request):
     """
         Page for creating a new order
@@ -219,6 +232,7 @@ def new_order(request):
     return render_to_response('Project/new_order.html', {"parts": parts, "suppliers": suppliers, })
 
 
+@login_required()
 def place_order_ajax(request):
     """
         Create a new order
@@ -256,6 +270,7 @@ def place_order_ajax(request):
     return HttpResponse(json.dumps(returnDict), content_type="application/json")
 
 
+@login_required()
 def create_supplier_ajax(request):
     """
         Simple routine to add a supplier
@@ -276,6 +291,7 @@ def create_supplier_ajax(request):
     return HttpResponse(json.dumps(returnDict), content_type="application/json")
 
 
+@login_required()
 def create_account_ajax(request):
     """
         Simple routine to add an account to a supplier
@@ -295,6 +311,7 @@ def create_account_ajax(request):
     return HttpResponse(json.dumps(returnDict), content_type="application/json")
 
 
+@login_required()
 def get_accounts_ajax(request):
     returnList = []
     if request.method == 'POST':
@@ -310,6 +327,7 @@ def get_accounts_ajax(request):
     return HttpResponse(json.dumps(returnList), content_type="application/json")
 
 
+@login_required()
 def orders(request):
     """
         Orders Home Page
@@ -319,4 +337,27 @@ def orders(request):
     recent_arrivals = Order.objects.filter(date_arrived__range=[datetime.datetime.now(), datetime.datetime.now() -
                                                                                         (datetime.timedelta(days=14))])
     return render_to_response('Project/orders.html', {'recent_orders': recent_orders, 'all_orders': all_orders,
-                                                      'recent_arrivals': recent_arrivals })
+                                                      'recent_arrivals': recent_arrivals})
+
+
+def login(request):
+    data = {}
+    if "next" in request.GET.keys():
+        data['redirect_url'] = request.GET['next']
+    return render_to_response('Project/login.html', data)
+
+@csrf_exempt
+def login_attempt(request):
+    """
+        Attempt to login a user
+    """
+    user = authenticate(username=request.POST['username'], password=request.POST['password'])
+    returnData = {}
+    if user is None:
+        returnData['error'] = True
+    else:
+        if user.is_active:
+            auth_login(request, user)
+        else:
+            returnData['error'] = "Disabled"
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
