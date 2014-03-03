@@ -361,3 +361,19 @@ def login_attempt(request):
         else:
             returnData['error'] = "Disabled"
     return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+
+def order_arrived_ajax(request):
+    """
+        Set an order as arrived
+    """
+    returnDict = {}
+    if request.method == 'POST':
+        try:
+            datadict = json.loads(request.POST['datadict'])
+            order = Order.objects.filter(id=datadict['id']).get()
+            order.date_arrived = datetime.datetime.strptime(datadict['arrival_date'], "%m/%d/%Y")
+            order.save()
+        except Exception, e:
+            returnDict['error'] = e.message
+    return HttpResponse(json.dumps(returnDict), content_type="application/json")

@@ -1,14 +1,29 @@
 {% extends "base.html" %}
 
 {% block head %}
+    <script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+    <link href="/static/css/datepicker.css" rel="stylesheet">
     <link href="/static/css/jquery.dataTables.css" rel="stylesheet">
     <link href="/static/css/dataTables.bootstrap.css" rel="stylesheet">
+    <style>
+        .datepicker{z-index:1151;}
+    </style>
     <script src="/static/js/jquery.dataTables.js" type="text/javascript"></script>
     <script src="/static/js/dataTables.bootstrap.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#all_orders").dataTable();
+            $("#date_arrived").datepicker();
         });
+
+        function arrived(id){
+            $("#order_id").val(id);
+            $("#orderDelivered").modal('toggle');
+        }
+
+        function processArrivedForm(){
+
+        }
     </script>
 {% endblock %}
 
@@ -30,7 +45,9 @@
                             </thead>
                             <tbody>
                                 {% for order in recent_orders %}
-                                    <tr><td>{{ order.date_placed }}</td><td>{{ order.supplier.name }}</td><td>{{ order.expected_delivery }}</td></tr>
+                                    <tr><td>{{ order.date_placed }}</td><td>{{ order.supplier.name }}</td><td>
+                                        {{ order.expected_delivery }}</td><td>{% if not order.date_arrived %}<button class="btn btn-default"
+                                        onclick="arrived({{ order.id }});">Mark as Arrived</button>{% endif %}</td></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -89,5 +106,31 @@
             </div>
         </div>
      </div>
-
+    <div class="modal fade" id="orderDelivered" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <input type="hidden" id="order_id" />
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Mark Order As Delivered</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="newpartform">
+                        <div class="form-group">
+                            <label for="account_number" class="form-control">Account Number</label>
+                            <input type="text" id="date_arrived" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="processArrivedForm();">Save changes
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 {% endblock %}

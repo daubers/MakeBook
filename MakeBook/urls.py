@@ -23,6 +23,8 @@ urlpatterns = patterns('',
                        url(r'^Order/$', "Project.views.orders"),
                        url(r'^Order/New/$', "Project.views.new_order"),
                        url(r'^Order/New/Create/$', "Project.views.place_order_ajax"),
+                       url(r'^Order/Arrived/$', "Project.views.order_arrived_ajax"),
+
 
                        url(r'^Parts/New/Create/$', "Project.views.new_part"),
 
