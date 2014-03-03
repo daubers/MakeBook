@@ -4,6 +4,16 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+class UserProfile(models.Model):
+    """
+        A users profile
+    """
+    user = models.ForeignKey(User)
+    screen_name = models.TextField()
+    twitter = models.TextField(null=True)
+    bio = models.TextField(null=True)
+
+
 class Project(models.Model):
     """
         This model just contains the basic information about a project

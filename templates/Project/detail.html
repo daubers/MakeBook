@@ -32,6 +32,12 @@
             }
 
         }
+
+        function taskModel() {
+            $("#tasktitle").val("");
+            $("#taskdescription").val("");
+            $('#addtaskmodal').modal('toggle');
+        }
     </script>
 
 {% endblock %}
@@ -98,7 +104,7 @@
                     {% endif %}
 
                     <hr/>
-                    <button type="button" class="btn btn-default btn-sm" onclick="$('#addtaskmodal').modal('toggle')">
+                    <button type="button" class="btn btn-default btn-sm" onclick="taskModel();">
                     <span class="glyphicon glyphicon-plus-sign"></span>
                     </button>
                 </div>
