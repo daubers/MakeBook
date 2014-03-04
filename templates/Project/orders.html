@@ -22,7 +22,20 @@
         }
 
         function processArrivedForm(){
-
+            //Order/Arrived/
+            var id = $("#order_id").val();
+            var arrival_date = $("#date_arrived").val();
+            if (arrival_date == ""){
+                $("#dateform").addClass("has-error");
+            } else {
+                var post_data = {
+                    id: id,
+                    arrival_date: arrival_date
+                }
+                $.post('/Order/Arrived/', {datadict : JSON.stringify(post_data)}, function(data){
+                    location.reload();
+                })
+            }
         }
     </script>
 {% endblock %}
@@ -46,8 +59,7 @@
                             <tbody>
                                 {% for order in recent_orders %}
                                     <tr><td>{{ order.date_placed }}</td><td>{{ order.supplier.name }}</td><td>
-                                        {{ order.expected_delivery }}</td><td>{% if not order.date_arrived %}<button class="btn btn-default"
-                                        onclick="arrived({{ order.id }});">Mark as Arrived</button>{% endif %}</td></tr>
+                                        {{ order.expected_delivery }}</td></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -66,11 +78,12 @@
                     {% if all_orders %}
                         <table id="all_orders">
                             <thead>
-                                <tr><th>Date Placed</th><th>Supplier</th><th>Expected Delivery</th><th>Date Arrived</th></tr>
+                                <tr><th>Date Placed</th><th>Supplier</th><th>Expected Delivery</th><th>Date Arrived</th><th>Commands</th></tr>
                             </thead>
                             <tbody>
                                 {% for order in all_orders %}
-                                    <tr><td>{{ order.date_placed }}</td><td>{{ order.supplier.name }}</td><td>{{ order.expected_delivery }}</td><td>{{ order.date_arrived }}</td></tr>
+                                    <tr><td>{{ order.date_placed }}</td><td>{{ order.supplier.name }}</td><td>{{ order.expected_delivery }}</td><td>{{ order.date_arrived }}</td><td>{% if not order.date_arrived %}<button class="btn btn-default"
+                                        onclick="arrived({{ order.id }});">Mark as Arrived</button>{% endif %}</td></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -117,9 +130,9 @@
                 </div>
                 <div class="modal-body">
                     <div id="newpartform">
-                        <div class="form-group">
-                            <label for="account_number" class="form-control">Account Number</label>
-                            <input type="text" id="date_arrived" />
+                        <div id="dateform" class="form-group">
+                            <label for="account_number" class="form-control">Arrival Date</label>
+                            <input type="text" id="date_arrived" class="form-control"/>
                         </div>
                     </div>
                 </div>
